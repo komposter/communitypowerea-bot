@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 import { Telegraf } from 'telegraf'
 import axios from 'axios';
-import excerptHtml from 'excerpt-html';
 
 dotenv.config();
 
@@ -33,91 +32,74 @@ const performSearch = async (query) => {
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
-bot.telegram.setMyCommands([{
-    command: "/start",
-    description: "Welcome to the CommunityPower EA Bot!"
+await bot.telegram.setMyCommands([{
+    command: "start",
+    description: "Welcome to CommunityPower Help Bot"
 },
 {
-    command: "/help",
-    description: "Usage '/help <your question here>'."
+    command: "help",
+    description: "<your question here> (after space)"
 },
 {
-    command: "/guide",
-    description: "Quick link to the official CommunityPower EA Document."
+    command: "guide",
+    description: "Official CommunityPower EA documentation"
+},
+{
+    command: "forum",
+    description: "Community set-files and ideas (UserEcho forum)"
 }]);
 
 bot.command('start', async (ctx) => {
-    await ctx.reply("Please use '/help <your question here>'. Searches the help topics in forum.");
+    await ctx.reply("This bot will search help topics on the community forum.\n\nUse '/help <your question>' command to ask any questions you have!");
 });
 
 bot.command('guide', async (ctx) => {
     await ctx.reply("https://docs.google.com/document/d/1ww1M97H54IBwtCKZDhxtqsTsrtEMKofXHMEWMGCyZNs");
 });
 
-bot.command('help', async (ctx) => {
+bot.command('forum', async (ctx) => {
+    await ctx.reply("https://communitypowerea.userecho.com/");
+});
+
+const help = async (ctx) => {
     const { update: { message: { text } } } = ctx;
 
-    if (text === "/help@CommunityPowerEABot" || text === "/help") {
-        ctx.reply("Please use '/help <your question here>'. Searches the help topics in forum.");
+    if (text === `/help@${process.env.BOT_NAME}` || text === "/help") {
+        await ctx.reply("Please, specify your question: /help <your question>");
         return;
     }
 
-    const query = text.replace("\/help@CommunityPowerEABot ", "").replace("\/help ", "");
-
-    await ctx.reply(`Searching forum for '${query}'...`);
+    const query = text.replace(`\/help@${process.env.BOT_NAME} `, "").replace("\/help ", "");
 
     const response = await performSearch(query);
 
     if (response.data.status === 'success') {
         const results = response.data.data;
 
-        await ctx.reply(`Found ${results.length} results...`);
-        for (const _result of results) {
+        if (results.length === 0) {
+            await ctx.reply(`No topics related to '${query}' found. Try to rephrase!`);
+            return;
+        }
+
+        await ctx.reply(`Help topics related to the '${query}':`);
+        for (let i = 0; i < Math.min(results.length, 3); i++) {
+            const _result = results[i];
             await ctx.reply(`[${escapeCharacters(_result.header)}]\(${escapeCharacters(_result.url)}\)`, {
                 parse_mode: 'MarkdownV2',
                 disable_web_page_preview: true
             });
         }
-    }
-});
 
-bot.on('inline_query', async (ctx) => {
-
-    const result = [];
-
-    const { update: { inline_query: { query } } } = ctx;
-
-    const response = await performSearch(query);
-
-    if (response.data.status === 'success') {
-        const results = response.data.data;
-
-        for (const _result of results) {
-            const excerpt = excerptHtml(_result.description, {
-                stripTags: true, // Set to false to get html code
-                pruneLength: 140, // Amount of characters that the excerpt should contain
-                pruneString: '…', // Character that will be added to the pruned string
-                pruneSeparator: ' ', // Separator to be used to separate words
-            })
-
-            result.push({
-                type: "article",
-                id: _result.id,
-                title: _result.header,
-                input_message_content: {
-                    message_text: `[${escapeCharacters(_result.header)}]\(${escapeCharacters(_result.url)}\)`,
-                    parse_mode: 'MarkdownV2',
-                    disable_web_page_preview: true
-                },
-                url: _result.url,
-                hide_url: true,
-                description: excerpt
+        if (results.length > 3) {
+            await ctx.reply(`[show more...]\(https://communitypowerea.userecho.com/search?forum_id=7&search=${escapeCharacters(query)}\)`, {
+                parse_mode: 'MarkdownV2',
+                disable_web_page_preview: true
             });
         }
     }
+}
 
-    await ctx.answerInlineQuery(result)
-})
+bot.command('help', help);
 
 bot.launch()
 
