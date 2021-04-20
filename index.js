@@ -64,12 +64,12 @@ bot.command('forum', async (ctx) => {
 const help = async (ctx) => {
     const { update: { message: { text } } } = ctx;
 
-    if (text === `/help@${process.env.BOT_NAME}` || text === "/help") {
+    if (text === `/help@${process.env.BOT_USERNAME}` || text === "/help") {
         await ctx.reply("Please, specify your question: /help <your question>");
         return;
     }
 
-    const query = text.replace(`\/help@${process.env.BOT_NAME} `, "").replace("\/help ", "");
+    const query = text.replace(`\/help@${process.env.BOT_USERNAME} `, "").replace("\/help ", "");
 
     const response = await performSearch(query);
 
