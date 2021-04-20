@@ -91,7 +91,7 @@ const help = async (ctx) => {
         }
 
         if (results.length > 3) {
-            await ctx.reply(`[show more...]\(https://communitypowerea.userecho.com/search?forum_id=7&search=${escapeCharacters(query)}\)`, {
+            await ctx.reply(`[show more\\.\\.\\.]\(https://communitypowerea.userecho.com/search?forum_id=7&search=${escapeCharacters(query)}\)`, {
                 parse_mode: 'MarkdownV2',
                 disable_web_page_preview: true
             });
