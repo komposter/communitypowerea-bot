@@ -81,7 +81,7 @@ const help = async (ctx) => {
             return;
         }
 
-        await ctx.reply(`Help topics related to the '${query}':`);
+        await ctx.reply(`Help topics related to '${query}':`);
         for (let i = 0; i < Math.min(results.length, 3); i++) {
             const _result = results[i];
             await ctx.reply(`[${escapeCharacters(_result.header)}]\(${escapeCharacters(_result.url)}\)`, {
