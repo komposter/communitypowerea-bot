@@ -32,22 +32,23 @@ const performSearch = async (query) => {
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
-await bot.telegram.setMyCommands([{
-    command: "start",
-    description: "Welcome to CommunityPower Help Bot"
-},
-{
-    command: "help",
-    description: "<your question here> (after space)"
-},
-{
-    command: "guide",
-    description: "Official CommunityPower EA documentation"
-},
-{
-    command: "forum",
-    description: "Community set-files and ideas (UserEcho forum)"
-}]);
+await bot.telegram.setMyCommands([
+    // {
+    //     command: "start",
+    //     description: "Welcome to CommunityPower Help Bot"
+    // },
+    {
+        command: "help",
+        description: "<your question here> (after space)"
+    },
+    {
+        command: "guide",
+        description: "Official CommunityPower EA documentation"
+    },
+    {
+        command: "forum",
+        description: "Community set-files and ideas (UserEcho forum)"
+    }]);
 
 bot.command('start', async (ctx) => {
     await ctx.reply("This bot will search help topics on the community forum.\n\nUse '/help <your question>' command to ask any questions you have!");
