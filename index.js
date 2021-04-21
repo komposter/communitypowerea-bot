@@ -81,21 +81,20 @@ const help = async (ctx) => {
             return;
         }
 
-        await ctx.reply(`Help topics related to '${query}':`);
+        let message = `Help topics related to '${query}':\n`
         for (let i = 0; i < Math.min(results.length, 3); i++) {
             const _result = results[i];
-            await ctx.reply(`[${escapeCharacters(_result.header)}]\(${escapeCharacters(_result.url)}\)`, {
-                parse_mode: 'MarkdownV2',
-                disable_web_page_preview: true
-            });
+            message += `\\- [${escapeCharacters(_result.header)}]\(${escapeCharacters(_result.url)}\)\n`;
         }
 
         if (results.length > 3) {
-            await ctx.reply(`[show more\\.\\.\\.]\(https://communitypowerea.userecho.com/search?forum_id=7&search=${escapeCharacters(query)}\)`, {
-                parse_mode: 'MarkdownV2',
-                disable_web_page_preview: true
-            });
+            message += `\\- [Show more results]\(https://communitypowerea.userecho.com/search?forum_id=7&search=${escapeCharacters(query)}\)`;
         }
+
+        await ctx.reply(message, {
+            parse_mode: 'MarkdownV2',
+            disable_web_page_preview: true
+        });
     }
 }
 
