@@ -1,6 +1,9 @@
 import dotenv from "dotenv";
-import { Telegraf } from 'telegraf'
+import { Telegraf, Markup } from 'telegraf'
 import axios from 'axios';
+import NodeCache from "node-cache";
+
+const cache = new NodeCache({ stdTTL: 300, checkperiod: 320 });
 
 dotenv.config();
 
@@ -63,10 +66,15 @@ bot.command('forum', async (ctx) => {
 });
 
 const help = async (ctx) => {
-    const { update: { message: { text } } } = ctx;
+    const { update: { message: { text, from: { id } } } } = ctx;
 
     if (text === `/help@${process.env.BOT_USERNAME}` || text === "/help") {
-        await ctx.reply("Please, specify your question: /help <your question>");
+        if (cache.set(id, "PENDING_QUESTION")) {
+            await ctx.reply("Please, specify your question.", Markup.forceReply());
+        } else {
+            await ctx.reply("Please, specify your question: /help <your question>");
+        }
+
         return;
     }
 
@@ -100,6 +108,42 @@ const help = async (ctx) => {
 }
 
 bot.command('help', help);
+
+bot.on('text', async (ctx) => {
+    const { update: { message: { text, from: { id } } } } = ctx;
+
+    const state = cache.take(id);
+    if (state && state === "PENDING_QUESTION") {
+
+        const query = text.replace(`\/help@${process.env.BOT_USERNAME} `, "").replace("\/help ", "");
+
+        const response = await performSearch(query);
+
+        if (response.data.status === 'success') {
+            const results = response.data.data;
+
+            if (results.length === 0) {
+                await ctx.reply(`No topics related to '${query}' found. Try to rephrase!`);
+                return;
+            }
+
+            let message = `Help topics related to '${query}':\n`
+            for (let i = 0; i < Math.min(results.length, 3); i++) {
+                const _result = results[i];
+                message += `\\- [${escapeCharacters(_result.header)}]\(${escapeCharacters(_result.url)}\)\n`;
+            }
+
+            if (results.length > 3) {
+                message += `\\- [Show more results]\(https://communitypowerea.userecho.com/search?forum_id=7&search=${escapeCharacters(query)}\)`;
+            }
+
+            await ctx.reply(message, {
+                parse_mode: 'MarkdownV2',
+                disable_web_page_preview: true
+            });
+        }
+    }
+});
 
 bot.launch()
 
