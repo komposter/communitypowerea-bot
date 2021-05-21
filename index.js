@@ -70,7 +70,7 @@ const help = async (ctx) => {
 
     if (text === `/help@${process.env.BOT_USERNAME}` || text === "/help") {
         if (cache.set(id, "PENDING_QUESTION")) {
-            await ctx.reply("Please, specify your question.", Markup.forceReply());
+            await ctx.reply("Please, specify your question.", Markup.forceReply(true).selective(true));
         } else {
             await ctx.reply("Please, specify your question: /help <your question>");
         }
