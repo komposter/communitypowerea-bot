@@ -66,11 +66,10 @@ bot.command('forum', async (ctx) => {
 });
 
 const help = async (ctx) => {
-    const { update: { message: { text, from: { id } } } } = ctx;
-
+    const { update: { message: { text, from: { id, username } } } } = ctx;
     if (text === `/help@${process.env.BOT_USERNAME}` || text === "/help") {
         if (cache.set(id, "PENDING_QUESTION")) {
-            await ctx.reply("Please, specify your question.", Markup.forceReply(true).selective(true));
+            await ctx.reply(`Hello @${username}! Please, specify your question.`, Markup.forceReply(true).selective(true));
         } else {
             await ctx.reply("Please, specify your question: /help <your question>");
         }
