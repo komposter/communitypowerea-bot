@@ -46,9 +46,8 @@ const message = `🌈 How to support the project:
 
     const bot = new Telegraf(process.env.BOT_TOKEN);
 
-    schedule.scheduleJob('/1 * * * *', function () {
-        bot.telegram.sendMessage("@CommunityPowerEATest", message);
-        //ctx.telegram.sendMessage("@CommunityPowerEA", message);
+    const job = schedule.scheduleJob('* * */8 * *', function () {
+        ctx.telegram.sendMessage("@CommunityPowerEA", message);
     });
 
     await bot.telegram.setMyCommands([
@@ -169,7 +168,9 @@ const message = `🌈 How to support the project:
         }
     });
 
-    bot.launch()
+    await bot.launch()
+
+    console.log("Bot running.");
 
     process.once('SIGINT', () => bot.stop('SIGINT'))
     process.once('SIGTERM', () => bot.stop('SIGTERM'))
