@@ -1,0 +1,13 @@
+name: Bot Service
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: self-hosted
+    steps:
+      - name: Restart Server
+        run: pm2 start 0
