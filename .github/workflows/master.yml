@@ -6,15 +6,8 @@ on:
 
 jobs:
   build:
+
     runs-on: self-hosted
-    env:
-      GITHUB_WORKSPACE: /home/ec2-user
     steps:
-      - uses: actions/checkout@v2
-      - name: Install dependencies
-        run: npm i
-      - name: Copy Config
-        run: cp ~/config/.env $GITHUB_WORKSPACE/.env
-      - name: Run server script
-        run: pm2 start index
-        
+      - name: Restart Server
+        run: pm2 start 0
