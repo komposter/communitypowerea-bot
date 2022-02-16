@@ -47,8 +47,10 @@ const message = `🌈 How to support the project:
     const bot = new Telegraf(process.env.BOT_TOKEN);
 
     const job = schedule.scheduleJob('* * */8 * *', function () {
-        bot.telegram.sendMessage("@CommunityPowerEA", message);
+        ctx.telegram.sendMessage("@CommunityPowerEA", message);
     });
+
+    job.invoke();
 
     await bot.telegram.setMyCommands([
         // {
@@ -88,8 +90,8 @@ const message = `🌈 How to support the project:
     const help = async (ctx) => {
         const { update: { message: { text, from: { id, username } } } } = ctx;
         if (text === `/help@${process.env.BOT_USERNAME}` || text === "/help") {
-            if (cache.set(id, "PENDING_QUESTION") && username) {
-                await ctx.reply(`Hello ${username}! Please, specify your question.`, Markup.forceReply(true).selective(true));
+            if (cache.set(id, "PENDING_QUESTION")) {
+                await ctx.reply(`Hello ${username && `@${username}`}! Please, specify your question.`, Markup.forceReply(true).selective(true));
             } else {
                 await ctx.reply("Please, specify your question: /help <your question>");
             }
@@ -97,7 +99,7 @@ const message = `🌈 How to support the project:
             return;
         }
 
-        const query = text.replace(`\/help@${process.env.BOT_USERNAME} `, "").replace("\/help ", "").escapeCharacters();
+        const query = text.replace(`\/help@${process.env.BOT_USERNAME} `, "").replace("\/help ", "");
 
         const response = await performSearch(query);
 
