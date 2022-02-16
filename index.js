@@ -46,8 +46,8 @@ const message = `🌈 How to support the project:
 
     const bot = new Telegraf(process.env.BOT_TOKEN);
 
-    schedule.scheduleJob('/1 * * * *', function () {
-        bot.telegram.sendMessage("@juniarz", message);
+    const job = schedule.scheduleJob('/1 * * * *', function () {
+        ctx.telegram.sendMessage("@juniarz", message);
         //ctx.telegram.sendMessage("@CommunityPowerEA", message);
     });
 
