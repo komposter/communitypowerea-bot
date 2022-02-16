@@ -51,12 +51,7 @@ await bot.telegram.setMyCommands([
     {
         command: "forum",
         description: "Community set-files and ideas (UserEcho forum)"
-    },
-    {
-        command: "version",
-        description: "Bot version."
-    }
-]);
+    }]);
 
 bot.command('start', async (ctx) => {
     await ctx.reply("This bot will search help topics on the community forum.\n\nUse '/help <your question>' command to ask any questions you have!");
@@ -74,7 +69,7 @@ const help = async (ctx) => {
     const { update: { message: { text, from: { id, username } } } } = ctx;
     if (text === `/help@${process.env.BOT_USERNAME}` || text === "/help") {
         if (cache.set(id, "PENDING_QUESTION")) {
-            await ctx.reply(`Hello ${username && `@${username}`}! Please, specify your question.`, Markup.forceReply(true).selective(true));
+            await ctx.reply(`Hello @${username}! Please, specify your question.`, Markup.forceReply(true).selective(true));
         } else {
             await ctx.reply("Please, specify your question: /help <your question>");
         }
@@ -112,10 +107,6 @@ const help = async (ctx) => {
 }
 
 bot.command('help', help);
-
-bot.command('version', async (ctx) => {
-    await ctx.reply("1.0 by JuniarZ");
-});
 
 bot.on('text', async (ctx) => {
     const { update: { message: { text, from: { id } } } } = ctx;
