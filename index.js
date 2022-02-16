@@ -51,7 +51,12 @@ await bot.telegram.setMyCommands([
     {
         command: "forum",
         description: "Community set-files and ideas (UserEcho forum)"
-    }]);
+    },
+    {
+        command: "version",
+        description: "Bot version."
+    }
+]);
 
 bot.command('start', async (ctx) => {
     await ctx.reply("This bot will search help topics on the community forum.\n\nUse '/help <your question>' command to ask any questions you have!");
@@ -107,6 +112,10 @@ const help = async (ctx) => {
 }
 
 bot.command('help', help);
+
+bot.command('version', async (ctx) => {
+    await ctx.reply("1.01 (2022.02.16) by komposter");
+});
 
 bot.on('text', async (ctx) => {
     const { update: { message: { text, from: { id } } } } = ctx;
