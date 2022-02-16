@@ -89,7 +89,7 @@ const message = `🌈 How to support the project:
         const { update: { message: { text, from: { id, username } } } } = ctx;
         if (text === `/help@${process.env.BOT_USERNAME}` || text === "/help") {
             if (cache.set(id, "PENDING_QUESTION") && username) {
-                await ctx.reply(`Hello @${username}! Please, specify your question.`, Markup.forceReply(true).selective(true));
+                await ctx.reply(`Hello ${username}! Please, specify your question.`, Markup.forceReply(true).selective(true));
             } else {
                 await ctx.reply("Please, specify your question: /help <your question>");
             }
@@ -97,7 +97,7 @@ const message = `🌈 How to support the project:
             return;
         }
 
-        const query = text.replace(`\/help@${process.env.BOT_USERNAME} `, "").replace("\/help ", "");
+        const query = text.replace(`\/help@${process.env.BOT_USERNAME} `, "").replace("\/help ", "").escapeCharacters();
 
         const response = await performSearch(query);
 
