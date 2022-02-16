@@ -50,8 +50,6 @@ const message = `🌈 How to support the project:
         ctx.telegram.sendMessage("@CommunityPowerEA", message);
     });
 
-    job.invoke();
-
     await bot.telegram.setMyCommands([
         // {
         //     command: "start",
