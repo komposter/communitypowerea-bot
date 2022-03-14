@@ -82,9 +82,9 @@ const help = async (ctx) => {
         return;
     }
 
-    const query = text.replace(`\/help@${process.env.BOT_USERNAME} `, "").replace("\/help ", "").escapeCharacters();
+    const query = text.replace(`\/help@${process.env.BOT_USERNAME} `, "").replace("\/help ", "");
 
-    const response = await performSearch(query);
+    const response = await performSearch(escapeCharacters(query));
 
     if (response.data.status === 'success') {
         const results = response.data.data;
