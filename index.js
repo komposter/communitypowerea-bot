@@ -29,6 +29,28 @@ const escapeCharacters = (str) => {
         .replace(/\!/g, "\\!");
 }
 
+const removeCharacters = (str) => {
+    return new String(str)
+        .replace(/\_/g, "")
+        .replace(/\*/g, "")
+        .replace(/\[]/g, "")
+        .replace(/\]/g, "")
+        .replace(/\(/g, "")
+        .replace(/\)/g, "")
+        .replace(/\~/g, "")
+        .replace(/\`/g, "")
+        .replace(/\>/g, "")
+        .replace(/\#/g, "")
+        .replace(/\+/g, "")
+        .replace(/\-/g, "")
+        .replace(/\=/g, "")
+        .replace(/\|/g, "")
+        .replace(/\{/g, "")
+        .replace(/\}/g, "")
+        .replace(/\./g, "")
+        .replace(/\!/g, "");
+}
+
 const performSearch = async (query) => {
     return axios.get(`https://communitypowerea.userecho.com/api/v2/forums/7/topics/search.json?query=${query}&access_token=${process.env.USERECHO_TOKEN}`);
 }
@@ -84,7 +106,7 @@ const help = async (ctx) => {
 
     const query = text.replace(`\/help@${process.env.BOT_USERNAME} `, "").replace("\/help ", "");
 
-    const response = await performSearch(escapeCharacters(query));
+    const response = await performSearch(removeCharacters(query));
 
     if (response.data.status === 'success') {
         const results = response.data.data;
@@ -108,6 +130,10 @@ const help = async (ctx) => {
             parse_mode: 'MarkdownV2',
             disable_web_page_preview: true
         });
+    }
+    else {
+      await ctx.reply(`Failed to perform search '${query}'!`);
+      return;
     }
 }
 
