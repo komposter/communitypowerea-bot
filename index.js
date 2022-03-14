@@ -82,7 +82,7 @@ const help = async (ctx) => {
         return;
     }
 
-    const query = text.replace(`\/help@${process.env.BOT_USERNAME} `, "").replace("\/help ", "");
+    const query = text.replace(`\/help@${process.env.BOT_USERNAME} `, "").replace("\/help ", "").escapeCharacters();
 
     const response = await performSearch(query);
 
@@ -114,7 +114,7 @@ const help = async (ctx) => {
 bot.command('help', help);
 
 bot.command('version', async (ctx) => {
-    await ctx.reply("1.01 (2022.02.16) by komposter");
+    await ctx.reply("1.02 (2022.03.15) by komposter");
 });
 
 bot.on('text', async (ctx) => {
