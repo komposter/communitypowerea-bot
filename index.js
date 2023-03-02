@@ -96,9 +96,8 @@ const help = async (ctx) => {
     const { update: { message: { text, from: { id, username } } } } = ctx;
     if (text === `/help@${process.env.BOT_USERNAME}` || text === "/help")
     {
-        cache.set(id, "PENDING_QUESTION");
+        // cache.set(id, "PENDING_QUESTION");
         await ctx.reply("Please, specify your question: /help <your question>");
-
         return;
     }
 
