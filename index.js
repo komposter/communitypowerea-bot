@@ -140,7 +140,7 @@ const help = async (ctx) => {
 bot.command('help', help);
 
 bot.command('version', async (ctx) => {
-    await ctx.reply("1.03.beta1 (2022.05.23)");
+    await ctx.reply("1.03.beta2 (2023.03.02)");
 });
 
 bot.on('text', async (ctx) => {
