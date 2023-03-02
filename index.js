@@ -98,9 +98,9 @@ const help = async (ctx) => {
     {
         let message = `Here are some points to get you started:\n`
         message += `\\- [${escapeCharacters('Users guide')}]\(${escapeCharacters("https://docs.google.com/document/d/1ww1M97H54IBwtCKZDhxtqsTsrtEMKofXHMEWMGCyZNs")}\)\n`;
-        message += `\\- [${escapeCharacters('Community forum')}]\(${escapeCharacters("https://communitypowerea.userecho.com/")}\)\n`;
+        message += `\\- [${escapeCharacters('Community forum')}]\(${escapeCharacters("https://communitypowerea.userecho.com/forum_id=7")}\)\n`;
 
-        message += `\\nIf you have specific question, use '/help' command with your keywords\\. For example: \`\/help broker\``;
+        message += `\n\nIf you have specific question, use '/help' command with your keywords\\. For example: \`\/help broker\``;
 
         await ctx.reply(message, {
             parse_mode: 'MarkdownV2',
@@ -144,7 +144,7 @@ const help = async (ctx) => {
 bot.command('help', help);
 
 bot.command('version', async (ctx) => {
-    await ctx.reply("1.03.beta4 (2023.03.02)");
+    await ctx.reply("1.04 b1 (2023.03.02)");
 });
 
 // bot.on('text', async (ctx) => {
