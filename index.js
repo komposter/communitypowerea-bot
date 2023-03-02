@@ -96,14 +96,8 @@ const help = async (ctx) => {
     const { update: { message: { text, from: { id, username } } } } = ctx;
     if (text === `/help@${process.env.BOT_USERNAME}` || text === "/help")
     {
-        // if (cache.set(id, "PENDING_QUESTION"))
-        // {
-        //     await ctx.reply(`Hello @${username}! Please, specify your question.`, Markup.forceReply(true).selective(true));
-        // }
-        // else
-        {
-            await ctx.reply("Please, specify your question: /help <your question>");
-        }
+        cache.set(id, "PENDING_QUESTION");
+        await ctx.reply("Please, specify your question: /help <your question>");
 
         return;
     }
@@ -137,22 +131,21 @@ const help = async (ctx) => {
     }
     else {
       await ctx.reply(`Failed to perform search '${query}'!`);
-      return;
     }
 }
 
 bot.command('help', help);
 
 bot.command('version', async (ctx) => {
-    await ctx.reply("1.03.beta2 (2023.03.02)");
+    await ctx.reply("1.03.beta3 (2023.03.02)");
 });
 
 bot.on('text', async (ctx) => {
     const { update: { message: { text, from: { id } } } } = ctx;
 
     const state = cache.take(id);
-    if (state && state === "PENDING_QUESTION") {
-
+    if (state && state === "PENDING_QUESTION")
+    {
         const query = text.replace(`\/help@${process.env.BOT_USERNAME} `, "").replace("\/help ", "");
 
         const response = await performSearch(query);
