@@ -101,7 +101,7 @@ const help = async (ctx) => {
         message += `\\- [${escapeCharacters('Community set files')}]\(${escapeCharacters("https://communitypowerea.userecho.com/communities/4-strategies-and-set-files")}\)\n`;
         message += `\\- [${escapeCharacters('How tos')}]\(${escapeCharacters("https://communitypowerea.userecho.com/communities/7-how-tos")}\)\n`;
 
-        message += `\n\nIf you have specific question, use '/help' command with your keywords\\. For example: \`\/help broker\``;
+        message += `\n\nIf you have specific question, use \`\/help\` command with your keywords\\. For example: \`\/help broker\``;
 
         await ctx.reply(message, {
             parse_mode: 'MarkdownV2',
