@@ -96,8 +96,16 @@ const help = async (ctx) => {
     const { update: { message: { text, from: { id, username } } } } = ctx;
     if (text === `/help@${process.env.BOT_USERNAME}` || text === "/help")
     {
-        // cache.set(id, "PENDING_QUESTION");
-        await ctx.reply("Please, specify your question: /help <your question>");
+        let message = `Here are some points to get you started:\n`
+        message += `\\- [${escapeCharacters('Users guide')}]\(${escapeCharacters("https://docs.google.com/document/d/1ww1M97H54IBwtCKZDhxtqsTsrtEMKofXHMEWMGCyZNs")}\)\n`;
+        message += `\\- [${escapeCharacters('Community forum')}]\(${escapeCharacters("https://communitypowerea.userecho.com/")}\)\n`;
+
+        message += `\\nIf you have specific question, use '/help' command with your keywords. For example: \`\/help broker\``;
+
+        await ctx.reply(message, {
+            parse_mode: 'MarkdownV2',
+            disable_web_page_preview: true
+        });
         return;
     }
 
@@ -136,44 +144,44 @@ const help = async (ctx) => {
 bot.command('help', help);
 
 bot.command('version', async (ctx) => {
-    await ctx.reply("1.03.beta3 (2023.03.02)");
+    await ctx.reply("1.03.beta4 (2023.03.02)");
 });
 
-bot.on('text', async (ctx) => {
-    const { update: { message: { text, from: { id } } } } = ctx;
-
-    const state = cache.take(id);
-    if (state && state === "PENDING_QUESTION")
-    {
-        const query = text.replace(`\/help@${process.env.BOT_USERNAME} `, "").replace("\/help ", "");
-
-        const response = await performSearch(query);
-
-        if (response.data.status === 'success') {
-            const results = response.data.data;
-
-            if (results.length === 0) {
-                await ctx.reply(`No topics related to '${query}' found. Try to rephrase!`);
-                return;
-            }
-
-            let message = `Help topics related to '${query}':\n`
-            for (let i = 0; i < Math.min(results.length, 3); i++) {
-                const _result = results[i];
-                message += `\\- [${escapeCharacters(_result.header)}]\(${escapeCharacters(_result.url)}\)\n`;
-            }
-
-            if (results.length > 3) {
-                message += `\\- [Show more results]\(https://communitypowerea.userecho.com/search?forum_id=7&search=${escapeCharacters(query)}\)`;
-            }
-
-            await ctx.reply(message, {
-                parse_mode: 'MarkdownV2',
-                disable_web_page_preview: true
-            });
-        }
-    }
-});
+// bot.on('text', async (ctx) => {
+//     const { update: { message: { text, from: { id } } } } = ctx;
+//
+//     const state = cache.take(id);
+//     if (state && state === "PENDING_QUESTION")
+//     {
+//         const query = text.replace(`\/help@${process.env.BOT_USERNAME} `, "").replace("\/help ", "");
+//
+//         const response = await performSearch(query);
+//
+//         if (response.data.status === 'success') {
+//             const results = response.data.data;
+//
+//             if (results.length === 0) {
+//                 await ctx.reply(`No topics related to '${query}' found. Try to rephrase!`);
+//                 return;
+//             }
+//
+//             let message = `Help topics related to '${query}':\n`
+//             for (let i = 0; i < Math.min(results.length, 3); i++) {
+//                 const _result = results[i];
+//                 message += `\\- [${escapeCharacters(_result.header)}]\(${escapeCharacters(_result.url)}\)\n`;
+//             }
+//
+//             if (results.length > 3) {
+//                 message += `\\- [Show more results]\(https://communitypowerea.userecho.com/search?forum_id=7&search=${escapeCharacters(query)}\)`;
+//             }
+//
+//             await ctx.reply(message, {
+//                 parse_mode: 'MarkdownV2',
+//                 disable_web_page_preview: true
+//             });
+//         }
+//     }
+// });
 
 bot.launch()
 
