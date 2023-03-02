@@ -98,7 +98,8 @@ const help = async (ctx) => {
     {
         let message = `Here are some points to get you started:\n`
         message += `\\- [${escapeCharacters('Users guide')}]\(${escapeCharacters("https://docs.google.com/document/d/1ww1M97H54IBwtCKZDhxtqsTsrtEMKofXHMEWMGCyZNs")}\)\n`;
-        message += `\\- [${escapeCharacters('Community forum')}]\(${escapeCharacters("https://communitypowerea.userecho.com/forum_id=7")}\)\n`;
+        message += `\\- [${escapeCharacters('Community set files')}]\(${escapeCharacters("https://communitypowerea.userecho.com/communities/4-strategies-and-set-files")}\)\n`;
+        message += `\\- [${escapeCharacters('How tos')}]\(${escapeCharacters("https://communitypowerea.userecho.com/communities/7-how-tos")}\)\n`;
 
         message += `\n\nIf you have specific question, use '/help' command with your keywords\\. For example: \`\/help broker\``;
 
@@ -144,7 +145,7 @@ const help = async (ctx) => {
 bot.command('help', help);
 
 bot.command('version', async (ctx) => {
-    await ctx.reply("1.04 b1 (2023.03.02)");
+    await ctx.reply("1.04 (2023.03.02)");
 });
 
 // bot.on('text', async (ctx) => {
